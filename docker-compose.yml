@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  project:
+    build: .
+    #command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/opt/services/project/src
+      - static_volume:/opt/services/project/static  # <-- bind the static volume
+      - media_volume:/opt/services/project/media  # <-- bind the media volume
+    networks:
+      - nginx_network
+    env_file:
+      - ./config/dev.env
+    depends_on:
+      - db
+  db:
+      image: postgres:13.0-alpine
+      volumes:
+       - postgres_data:/var/lib/postgresql/data/
+      env_file:
+       - ./config/dev.env.db
+      #ports:
+      #- 5432:5432
+      #environment:
+      #- POSTGRES_USER=hello_django
+      #- POSTGRES_PASSWORD=django_dev_pwd
+      #- POSTGRES_DB=hello_django_dev
+  #volumes:
+    #postgres_data:
+# To persist the data beyond the life of the container we configured a volume. 
+#This config will bind postgres_data to the "/var/lib/postgresql/data/" directory in the container.
+
+  nginx:
+    image: pagespeed/nginx-pagespeed:latest
+    ports:
+      - 80:80
+    volumes:
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - static_volume:/opt/services/project/static  # <-- bind the static volume
+      - media_volume:/opt/services/project/media  # <-- bind the media volume
+    depends_on:
+      - project
+    networks:
+      - nginx_network
+
+networks:
+  nginx_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  static_volume:  # <-- declare the static volume
+  media_volume:  # <-- declare the media volume

@@ -1,0 +1,26 @@
+docker-compose up -d --build
+
+Bring down the development containers
+ (and the associated volumes with the -v flag):
+$ docker-compose down -v
+
+
+Then, build the production images and spin up the containers:
+
+ docker-compose -f docker-compose.prod.yml up -d --build
+
+
+the database flush (which clears out the database) 
+and migrate commands every time the container is run? 
+This is fine in development, but let's create a new entrypoint 
+file for production.
+
+
+Test again:
+
+$ docker-compose -f docker-compose.prod.yml down -v
+$ docker-compose -f docker-compose.prod.yml up -d --build
+$ docker-compose -f docker-compose.prod.yml exec project python manage.py migrate --noinput
+
+bring again the docker down:
+$ docker-compose -f docker-compose.prod.yml down -v

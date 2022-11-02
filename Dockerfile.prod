@@ -1,0 +1,97 @@
+###########
+# BUILDER #
+###########
+
+
+#FROM python:3.9.6-alpine as builder
+FROM python:3.9.6 as builder 
+# This line is to solve Alpine Python Docker Base image problem with gcc, if there is no build problem, this line can be avoided
+# RUN apk add --no-cache --virtual .build-deps gcc musl-dev \
+ # && pip install cython \
+ # && apk del .build-deps
+
+# Set a work directory
+ WORKDIR /opt/services/project/src
+
+
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# install our dependencies
+#We can use pipfile and pipfilelock to lock the specific dependency version of our project alothou we are not doin here
+# we use --system flag because we don't need an extra virtualenv
+#COPY Pipfile Pipfile.lock /opt/services/project/src/
+#RUN pip install pipenv && pipenv install --system
+
+#install psycopg2 dependencies
+RUN apk update \
+     && apk add postgresql-dev gcc python3-dev musl-dev
+
+RUN pip install --upgrade pip
+#RUN pip install backports.zoneinfo
+RUN pip install flake8==3.9.2
+COPY . .
+RUN flake8 --ignore=E501,F401 .
+
+# install dependencies
+COPY ./packaging/requirements.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /opt/services/project/src/packaging/wheels -r requirements.txt
+
+#########
+# FINAL #
+#########
+# start from an official image
+#FROM python:3.9.6-alpine as builder
+FROM python:3.9.6
+
+#RUN apt-get -qq update && apt-get -qq install libmariadb-dev unixodbc-dev libffi-dev gcc libc-dev g++ libc-dev libxml2
+# arbitrary location choice: you can change the directory
+RUN mkdir -p /opt/services/project/src
+
+
+# create the app user
+RUN addgroup -S project && adduser -S project -G project
+
+
+# create the appropriate directories
+ENV HOME=/opt/services/project/src/
+ENV APP_HOME=/opt/services/project/src/packaging
+RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
+
+# install dependencies
+RUN apk update && apk add libpq
+COPY --from=builder /opt/services/project/src/packaging/wheels /wheels
+COPY --from=builder ./packaging/requirements.txt .
+RUN pip install --no-cache /wheels/*
+
+# copy entrypoint.sh
+COPY ./prod-db-entrypoint.sh .
+RUN sed -i 's/\r$//g' $APP_HOME/prod-db-entrypoint.sh
+RUN chmod +x $APP_HOME/prod-db-entrypoint.sh
+
+# copy our project code
+COPY . $APP_HOME
+RUN cd packaging && python manage.py collectstatic --no-input -v 2 
+
+# chown all the files to the app user
+RUN chown -R project:project $APP_HOME
+
+# change to the app user
+USER app
+
+# run db-entrypoint.sh
+ENTRYPOINT ["/opt/services/project/src/prod-db-entrypoint.sh"]
+
+# expose the port 8000
+EXPOSE 800
+
+# define the default command to run when starting the container
+#CMD ["gunicorn", "--chdir", "packaging", "--bind", ":800", "packaging.wsgi:application"]
+
+#docker-compose build
+#docker-compose up -d
+# docker-compose up -d --build
+
