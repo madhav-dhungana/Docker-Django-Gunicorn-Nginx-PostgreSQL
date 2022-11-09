@@ -16,6 +16,7 @@ fi
  #If we want to comment out the database flush and migrate commands in the entrypoint.sh script so they do not run on every container start or re-start:
 python packaging/manage.py flush --no-input
 python packaging/manage.py migrate
+#python packaging/manage.py runserver #(Needs to be tested)
 
 
 

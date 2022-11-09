@@ -63,7 +63,8 @@ CMD ["gunicorn", "--chdir", "packaging", "--bind", ":80", "packaging.wsgi:applic
 # docker-compose up -d --build
 
 # run db-entrypoint.sh
-ENTRYPOINT ["/opt/services/project/src/db-entrypoint.sh"]
+ENTRYPOINT ["./db-entrypoint.sh"]
+
 
 #Bring the container down and associated volumes with it (docker-compose down -v)
 #default password required for superuser to initialize the postgresdb( We are giving user, db and pwd with POSTGRES prefix.)
@@ -78,3 +79,5 @@ ENTRYPOINT ["/opt/services/project/src/db-entrypoint.sh"]
 # Check that the volume has been created correctly(docker volume inspect project_packaging_postgres_data)
 #docker ps - check the docker process with id
 #docker exec {7c27810f3d85} ls -la /var {id} to list the files in docker
+#docker start {project_packaging-db-1} can start the db container with container name
+#docker exec -it container_id python manage.py createsuperuser
