@@ -77,7 +77,8 @@ ENTRYPOINT ["./db-entrypoint.sh"]
 #docker-compose exec db psql --username=django_dev_user --dbname=django_dev_db
 #\l , \c django_dev_db ,  \dt, \q
 # Check that the volume has been created correctly(docker volume inspect project_packaging_postgres_data)
-#docker ps - check the docker process with id
+#docker ps -a check the docker process with id
 #docker exec {7c27810f3d85} ls -la /var {id} to list the files in docker
 #docker start {project_packaging-db-1} can start the db container with container name
 #docker exec -it container_id python manage.py createsuperuser
+#docker run -e POSTGRES_USER=docker -e POSTGRES_PASSWORD=docker -e POSTGRES_DB=docker 

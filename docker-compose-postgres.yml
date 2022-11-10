@@ -23,7 +23,7 @@ services:
        - ./config/dev.env.db
       
       ports:
-       - 5432:5432
+          - "5432:5432"
       #environment:
       #- POSTGRES_USER=hello_django
       #- POSTGRES_PASSWORD=django_dev_pwd
