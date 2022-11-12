@@ -26,8 +26,10 @@ ENV PYTHONUNBUFFERED 1
 #RUN pip install pipenv && pipenv install --system
 
 #install psycopg2 dependencies
-RUN apk update \
-     && apk add postgresql-dev gcc python3-dev musl-dev
+#RUN apk update \
+#     && apk add postgresql-dev gcc python3-dev musl-dev
+RUN apt-get update \
+    && apt-get install -y postgresql-server-dev-all gcc python3-dev musl-dev
 
 RUN pip install --upgrade pip
 #RUN pip install backports.zoneinfo
@@ -52,7 +54,9 @@ RUN mkdir -p /opt/services/project/src
 
 
 # create the app user
-RUN addgroup -S project && adduser -S project -G project
+#RUN addgroup -S project && adduser -S project -G project
+RUN addgroup --gid 2000 --system appgroup && \
+    adduser --uid 2000 --system app --gid 2000
 
 
 # create the appropriate directories
@@ -62,7 +66,9 @@ RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
 # install dependencies
-RUN apk update && apk add libpq
+#RUN apt-get update && apt-get add libpq
+RUN apt-get update \
+  && apt-get install libpq-dev -y
 COPY --from=builder /opt/services/project/src/packaging/wheels /wheels
 COPY --from=builder ./packaging/requirements.txt .
 RUN pip install --no-cache /wheels/*
@@ -85,8 +91,8 @@ USER app
 # run db-entrypoint.sh
 ENTRYPOINT ["/opt/services/project/src/prod-db-entrypoint.sh"]
 
-# expose the port 8000
-EXPOSE 800
+# expose the port 80 or 800
+EXPOSE 80
 
 # define the default command to run when starting the container
 #CMD ["gunicorn", "--chdir", "packaging", "--bind", ":800", "packaging.wsgi:application"]
