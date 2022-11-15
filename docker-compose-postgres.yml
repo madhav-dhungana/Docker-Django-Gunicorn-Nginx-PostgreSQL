@@ -3,7 +3,7 @@ version: '3.8'
 services:
   project:
     build: .
-    #command: python manage.py runserver 0.0.0.0:8000
+    # command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/opt/services/project/src
       - static_volume:/opt/services/project/static  # <-- bind the static volume
@@ -24,14 +24,14 @@ services:
       
       ports:
           - "5432:5432"
-      #environment:
-      #- POSTGRES_USER=hello_django
-      #- POSTGRES_PASSWORD=django_dev_pwd
-      #- POSTGRES_DB=hello_django_dev
-  #volumes:
+      # environment:
+      # - POSTGRES_USER=hello_django
+      # - POSTGRES_PASSWORD=django_dev_pwd
+      # - POSTGRES_DB=hello_django_dev
+  # volumes:
     #postgres_data:
 # To persist the data beyond the life of the container we configured a volume. 
-#This config will bind postgres_data to the "/var/lib/postgresql/data/" directory in the container.
+# This config will bind postgres_data to the "/var/lib/postgresql/data/" directory in the container.
 
   nginx:
     image: pagespeed/nginx-pagespeed:latest

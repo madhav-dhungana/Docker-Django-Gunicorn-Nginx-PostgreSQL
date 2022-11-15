@@ -3,7 +3,7 @@ version: '3.8'
 services:
   project:
     build: .
-    #command: python manage.py runserver 0.0.0.0:8000
+    # command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/opt/services/project/src
       - static_volume:/opt/services/project/static  # <-- bind the static volume

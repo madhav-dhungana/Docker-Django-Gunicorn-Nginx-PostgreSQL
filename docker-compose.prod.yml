@@ -28,10 +28,12 @@ services:
       - db_network
       env_file:
       - ./config/prod.env.db
-  #volumes:
-    #postgres_data:
+      ports:
+          - "5432:5432"
+  # volumes:
+    # postgres_data:
 # To persist the data beyond the life of the container we configured a volume. 
-#This config will bind postgres_data to the "/var/lib/postgresql/data/" directory in the container.
+# This config will bind postgres_data to the "/var/lib/postgresql/data/" directory in the container.
 
   nginx:
     image: pagespeed/nginx-pagespeed:latest

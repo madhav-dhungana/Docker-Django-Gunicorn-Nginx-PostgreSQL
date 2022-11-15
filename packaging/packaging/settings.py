@@ -20,14 +20,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-d9+a#)6pr+-$vp965!ys925kocx8fiz-ni*orzh2)bzogr1737'
+# SECRET_KEY = 'django-insecure-d9+a#)6pr+-$vp965!ys925kocx8fiz-ni*orzh2)bzogr1737'
 SECRET_KEY = os.environ.get("SECRET_KEY", "foo")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=1))
 
-#ALLOWED_HOSTS = []
-#ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+# ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split()
 
 # Application definition
@@ -75,12 +75,12 @@ WSGI_APPLICATION = 'packaging.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-#DATABASES = {
+# DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.sqlite3',
 #        'NAME': BASE_DIR / 'db.sqlite3',
 #    }
-#}
+# }
 
 
 DATABASES = {
@@ -131,9 +131,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'packaging', 'static'),]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'packaging', 'static'), ]
 
-## Serving the STATIC FILES
+# Serving the STATIC FILES
 # as declared in NginX conf, it must match /opt/services/djangoapp/static/
 STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'static')
 

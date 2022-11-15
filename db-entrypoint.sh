@@ -5,7 +5,7 @@ then
     echo "Waiting for postgres database server..."
 
     while ! nc -z $SQL_HOST $SQL_PORT; do
-      #sleep 0.5
+      # sleep 0.5
       sleep 5
     done
 
@@ -13,10 +13,10 @@ then
 fi
 
 
- #If we want to comment out the database flush and migrate commands in the entrypoint.sh script so they do not run on every container start or re-start:
+ # If we want to comment out the database flush and migrate commands in the entrypoint.sh script so they do not run on every container start or re-start:
 python packaging/manage.py flush --no-input
 python packaging/manage.py migrate
-#python packaging/manage.py runserver #(Needs to be tested)
+# python packaging/manage.py runserver #(Needs to be tested)
 
 
 
