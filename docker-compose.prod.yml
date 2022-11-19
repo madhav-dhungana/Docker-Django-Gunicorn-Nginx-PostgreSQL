@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     
-    command: gunicorn packaging.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn packaging.wsgi:application --bind 0.0.0.0:80
     expose:
       - 80
     volumes:
