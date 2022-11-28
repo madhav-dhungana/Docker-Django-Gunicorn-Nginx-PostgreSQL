@@ -80,5 +80,6 @@ ENTRYPOINT ["./db-entrypoint.sh"]
 # docker ps -a check the docker process with id
 # docker exec {7c27810f3d85} ls -la /var {id} to list the files in docker
 # docker start {project_packaging-db-1} can start the db container with container name
-# docker exec -it container_id python manage.py createsuperuser
+# docker exec -ti container_id python manage.py createsuperuser
 # docker run -e POSTGRES_USER=docker -e POSTGRES_PASSWORD=docker -e POSTGRES_DB=docker 
+# docker exec -ti <container-id> bash , after this check with ls -al

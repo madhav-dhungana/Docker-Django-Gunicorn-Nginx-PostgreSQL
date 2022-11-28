@@ -5,8 +5,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile.prod
-    
-    command: gunicorn packaging.wsgi:application --bind 0.0.0.0:80
+    command: gunicorn --chdir packaging --bind :80 packaging.wsgi:application
     expose:
       - 80
     volumes:

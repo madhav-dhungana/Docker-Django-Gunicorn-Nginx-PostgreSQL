@@ -39,6 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.humanize',  # Required for elapsed time formatting
+    'bootstrap4form',  # Required for nicer formatting of forms with the default templates
+    'rest_framework',  # required for the API
 ]
 
 MIDDLEWARE = [
@@ -125,6 +129,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+SITE_ID = 2
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
